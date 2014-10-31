@@ -46,18 +46,26 @@ new Responsible_Employee( 'branche' );
 
 The API works exactly the same as WordPress' meta API.
 
-`add_term_meta( $object_id, $meta_key, $meta_value, $unique = false )`
+```
+add_term_meta( $object_id, $meta_key, $meta_value, $unique = false )
+```
 
 See [`add_metadata`](http://codex.wordpress.org/Function_Reference/add_metadata).
 
-`update_term_meta( $object_id, $meta_key, $meta_value, $unique = false )`
+```
+update_term_meta( $object_id, $meta_key, $meta_value, $unique = false )
+```
 
 See [`update_metadata`](http://codex.wordpress.org/Function_Reference/update_metadata).
 
-`get_term_meta( $object_id, $meta_key, $meta_value, $unique = false )`
+```
+get_term_meta( $object_id, $meta_key, $meta_value, $unique = false )
+```
 
 See [`get_metadata`](http://codex.wordpress.org/Function_Reference/get_metadata).
 
-`delete_term_meta( $object_id, $meta_key, $meta_value, $unique = false )`
+```
+delete_term_meta( $object_id, $meta_key, $meta_value, $unique = false )
+```
 
 See [`delete_metadata`](http://codex.wordpress.org/Function_Reference/delete_metadata).
