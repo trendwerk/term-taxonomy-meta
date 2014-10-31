@@ -1,4 +1,4 @@
-taxonomy-term-meta
+Term taxonomy meta
 ==================
 
-Taxonomy term meta for WordPress.
+Term taxonomy meta for WordPress, so it allows extra information to be added to terms.
