@@ -3,13 +3,26 @@ Term taxonomy meta
 
 Term taxonomy meta for WordPress, so it allows extra information to be added to terms.
 
+### Installation
+If you're using Composer to manage WordPress, add this plugin to your project's dependencies. Run:
+```sh
+composer require trendwerk/term-taxonomy-meta 1.0.0
+```
+
+Or manually add it to your `composer.json`:
+```json
+"require": {
+	"trendwerk/term-taxonomy-meta": "1.0.0"
+},
+```
+
 ### Usage
 
 You can extend class for term meta called `TP_Term_Meta`.
 
 ### Example
 
-```
+```php
 /**
  * Responsible employee
  *
@@ -46,25 +59,25 @@ new Responsible_Employee( 'branche' );
 
 The API works exactly the same as WordPress' meta API.
 
-```
+```php
 add_term_meta( $object_id, $meta_key, $meta_value, $unique = false )
 ```
 
 See [`add_metadata`](http://codex.wordpress.org/Function_Reference/add_metadata).
 
-```
+```php
 update_term_meta( $object_id, $meta_key, $meta_value, $unique = false )
 ```
 
 See [`update_metadata`](http://codex.wordpress.org/Function_Reference/update_metadata).
 
-```
+```php
 get_term_meta( $object_id, $meta_key, $meta_value, $unique = false )
 ```
 
 See [`get_metadata`](http://codex.wordpress.org/Function_Reference/get_metadata).
 
-```
+```php
 delete_term_meta( $object_id, $meta_key, $meta_value, $unique = false )
 ```
 

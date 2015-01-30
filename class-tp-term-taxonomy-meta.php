@@ -3,6 +3,13 @@
  * Plugin Name: Term taxonomy meta
  * Description: Term taxonomy meta allows extra information to be added to terms.
  *
+ * Plugin URI: https://github.com/trendwerk/term-taxonomy-meta
+ * 
+ * Author: Trendwerk
+ * Author URI: https://github.com/trendwerk
+ * 
+ * Version: 1.0.0
+ *
  * @package Term_Taxonomy_Meta
  */
 
