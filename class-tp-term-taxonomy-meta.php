@@ -18,7 +18,13 @@ class TP_Term_Taxonomy_Meta {
 	var $db_version = '1.0';
 
 	function __construct() {
-		add_action( 'init', array( $this, 'init' ), 11 );
+		global $wp_version;
+
+		if (floatval($wp_version) < 4.4) {
+			add_action( 'init', array( $this, 'init' ), 11 );
+		} else {
+			add_action( 'init', array( $this, 'maybe_migrate' ), 11 );
+		}
 	}
 
 	/**
@@ -30,6 +36,35 @@ class TP_Term_Taxonomy_Meta {
 
 			global $wpdb;
 			$wpdb->term_taxonomymeta = $wpdb->prefix . $this->table;
+		}
+	}
+
+	/**
+	 * Maybe migrate to WP 4.4's own table
+	 */
+	function maybe_migrate() {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . $this->table;
+
+		$exists = $wpdb->query("SHOW TABLES LIKE '{$table_name}'");
+
+		if ($exists) {
+			// Migrate data to WP
+			$rows = $wpdb->get_results("SELECT * FROM {$table_name}");
+
+			if (0 < count($rows)) {
+				foreach ($rows as $row) {
+					update_term_meta($row->term_taxonomy_id, $row->meta_key, $row->meta_value);
+				}
+			}
+
+			// Check if all data has been migrated
+			$newRows = $wpdb->get_results("SELECT * FROM {$wpdb->termmeta}");
+
+			if (count($newRows) == count($rows)) {
+				$wpdb->query("DROP TABLE IF EXISTS {$table_name}");
+			}
 		}
 	}
 
@@ -121,45 +156,49 @@ class TP_Term_Meta {
 	}
 }
 
-/**
- * API: Some functions for taxonomy term meta
- *
- * @package TrendPress
- * @subpackage Term_Taxonomy_Meta
- */
+if (! function_exists('add_term_meta')) {
 
-/**
- * Add term taxonomy meta
- *
- * @see add_metadata
- */
-function add_term_meta( $object_id, $meta_key, $meta_value, $unique = false ) {
-	return add_metadata( 'term_taxonomy', $object_id, $meta_key, $meta_value, $unique );
-}
+	/**
+	 * API: Some functions for taxonomy term meta
+	 *
+	 * @package TrendPress
+	 * @subpackage Term_Taxonomy_Meta
+	 */
 
-/**
- * Update term taxonomy meta
- *
- * @see update_metadata
- */
-function update_term_meta( $object_id, $meta_key, $meta_value, $prev_value = '' ) {
-	return update_metadata( 'term_taxonomy', $object_id, $meta_key, $meta_value, $prev_value );
-}
+	/**
+	 * Add term taxonomy meta
+	 *
+	 * @see add_metadata
+	 */
+	function add_term_meta( $object_id, $meta_key, $meta_value, $unique = false ) {
+		return add_metadata( 'term_taxonomy', $object_id, $meta_key, $meta_value, $unique );
+	}
 
-/**
- * Get term taxonomy meta
- *
- * @see get_metadata
- */
-function get_term_meta( $object_id, $meta_key, $single = false ) {
-	return get_metadata( 'term_taxonomy', $object_id, $meta_key, $single );
-}
+	/**
+	 * Update term taxonomy meta
+	 *
+	 * @see update_metadata
+	 */
+	function update_term_meta( $object_id, $meta_key, $meta_value, $prev_value = '' ) {
+		return update_metadata( 'term_taxonomy', $object_id, $meta_key, $meta_value, $prev_value );
+	}
 
-/**
- * Delete term taxonomy meta
- *
- * @see delete_metadata
- */
-function delete_term_meta( $object_id, $meta_key, $meta_value, $delete_all = false ) {
-	return delete_metadata( 'term_taxonomy', $object_id, $meta_key, $meta_value, $delete_all );
+	/**
+	 * Get term taxonomy meta
+	 *
+	 * @see get_metadata
+	 */
+	function get_term_meta( $object_id, $meta_key, $single = false ) {
+		return get_metadata( 'term_taxonomy', $object_id, $meta_key, $single );
+	}
+
+	/**
+	 * Delete term taxonomy meta
+	 *
+	 * @see delete_metadata
+	 */
+	function delete_term_meta( $object_id, $meta_key, $meta_value, $delete_all = false ) {
+		return delete_metadata( 'term_taxonomy', $object_id, $meta_key, $meta_value, $delete_all );
+	}
+
 }
