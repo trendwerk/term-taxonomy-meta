@@ -55,7 +55,7 @@ class TP_Term_Taxonomy_Meta {
 
 			if (0 < count($rows)) {
 				foreach ($rows as $row) {
-					update_term_meta($row->term_taxonomy_id, $row->meta_key, $row->meta_value);
+					update_term_meta($row->term_taxonomy_id, $row->meta_key, maybe_unserialize($row->meta_value));
 				}
 			}
 
